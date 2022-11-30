@@ -41,4 +41,3 @@ void AScooter::LookRight(float Val)
 		AddControllerYawInput(Val);
 	}
 }
-
