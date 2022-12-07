@@ -3,35 +3,43 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "Components/SkeletalMeshComponent.h"
-#include "Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Components/TimelineComponent.h"
+#include "BaseVehicle.h"
 #include "Scooter.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class PACKETBIKER_API AScooter : public APawn
+class PACKETBIKER_API AScooter : public ABaseVehicle
 {
 	GENERATED_BODY()
 
 public:
 	AScooter();
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 
-public:	
+public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void LookUp(float Val);
-	void LookRight(float Val);
+	void Throttle(float Val);
+	void Steer(float Val);
 
+	void SteerLeftPress();
+	void SteerLeftRel();
+	void SteerRightPress();
+	void SteerRightRel();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent* MoveMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent* SteerMesh;
 protected:
-	UPROPERTY(Category = SkeletalMesh, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "True"))
-		class USkeletalMeshComponent* ScooterMesh;
 
-	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "True"))
-		class USpringArmComponent* SpringArm;
-
-	UPROPERTY(Category = Camera, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "True"))
-		class UCameraComponent* Camera;
+private:
+	float Speed;
+	float SteerDirection;
 };
