@@ -1,9 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ // Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Scooter.h"
 #include "FrontWheel.h"
 #include "RearWheel.h"
+#include "Components/TimelineComponent.h"
 
 
 static const FName NAME_SteerInput("Steer");
@@ -17,6 +18,13 @@ AScooter::AScooter()
 	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBP(TEXT("/Game/Vehicles/Motorcycles/Scooter/Scooter_AnimBP"));
 	GetMesh()->SetSkeletalMesh(Mannequin.Object);
 	GetMesh()->SetAnimInstanceClass(AnimBP.Object->GeneratedClass);
+
+	// Character Mesh Setup
+	Character = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Character"));
+	Character->SetupAttachment(GetMesh());
+	Character->SetRelativeLocation(FVector(0.000000f, -0.000135f, -1.465975f));
+	Character->SetRelativeRotation(FRotator(0.000000f, -90.000183f, 0.000000f));
+
 
 	// MoveMesh Setup
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Move_Mesh(TEXT("SkeletalMesh'/Game/Vehicles/Motorcycles/Scooter/Meshes/Scooter.Scooter'"));
@@ -79,11 +87,15 @@ AScooter::AScooter()
 	Vehicle4W->SteeringCurve.GetRichCurve()->AddKey(20.0f, 0.9000f);
 	Vehicle4W->SteeringCurve.GetRichCurve()->AddKey(60.0f, 0.8f);
 	Vehicle4W->SteeringCurve.GetRichCurve()->AddKey(120.0f, 0.7f);
+	
+
 }
 
-void AScooter::Tick(float DeltaTime)
+
+void AScooter::BeginPlay()
 {
-	//GEngine->AddOnScreenDebugMessage(-10, 1.f, FColor::Yellow, FString::Printf(TEXT("Speed: %f"), Speed));
+	Super::BeginPlay();
+
 }
 
 void AScooter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -129,4 +141,9 @@ void AScooter::SteerRightPress()
 void AScooter::SteerRightRel()
 {
 	SteerDirection = 0.f;
+}
+
+void AScooter::GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef)
+{
+	CharacterRef = Char;
 }

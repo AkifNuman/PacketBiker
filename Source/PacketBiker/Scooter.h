@@ -5,11 +5,15 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "BaseVehicle.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Scooter.generated.h"
 
 /**
  * 
  */
+
+class UCurveFloat;
+
 UCLASS()
 class PACKETBIKER_API AScooter : public ABaseVehicle
 {
@@ -17,9 +21,10 @@ class PACKETBIKER_API AScooter : public ABaseVehicle
 
 public:
 	AScooter();
-	virtual void Tick(float DeltaTime) override;
+
 
 protected:
+	virtual void BeginPlay() override;
 
 public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -37,6 +42,16 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		USkeletalMeshComponent* SteerMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent* Character;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		ACharacter* Char;
+
+	UFUNCTION(BlueprintCallable, Category = "kategori")
+	void GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef);
+
 protected:
 
 private:
