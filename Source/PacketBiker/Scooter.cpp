@@ -142,3 +142,8 @@ void AScooter::SteerRightRel()
 	SteerDirection = 0.f;
 }
 
+void AScooter::GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef)
+{
+
+}
+
