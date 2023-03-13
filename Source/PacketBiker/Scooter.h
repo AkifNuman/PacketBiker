@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "BaseVehicle.h"
+#include "Containers/Array.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Scooter.generated.h"
 
@@ -51,6 +52,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "kategori")
 	void GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef);
+
+	// Karakterlerin listesi
 
 protected:
 

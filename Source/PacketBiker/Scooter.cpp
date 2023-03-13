@@ -25,7 +25,6 @@ AScooter::AScooter()
 	Character->SetRelativeLocation(FVector(0.000000f, -0.000135f, -1.465975f));
 	Character->SetRelativeRotation(FRotator(0.000000f, -90.000183f, 0.000000f));
 
-
 	// MoveMesh Setup
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Move_Mesh(TEXT("SkeletalMesh'/Game/Vehicles/Motorcycles/Scooter/Meshes/Scooter.Scooter'"));
 	MoveMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Move Mesh"));
@@ -143,7 +142,3 @@ void AScooter::SteerRightRel()
 	SteerDirection = 0.f;
 }
 
-void AScooter::GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef)
-{
-	CharacterRef = Char;
-}
