@@ -5,12 +5,14 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "BaseVehicle.h"
-#include "Containers/Array.h"
+#include "BaseCharacter.h"
+#include "Components/BoxComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Scooter.generated.h"
 
 /**
- * 
+ *
  */
 
 class UCurveFloat;
@@ -37,6 +39,7 @@ public:
 	void SteerLeftRel();
 	void SteerRightPress();
 	void SteerRightRel();
+	void OutOfVehicle();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		USkeletalMeshComponent* MoveMesh;
@@ -45,19 +48,44 @@ public:
 		USkeletalMeshComponent* SteerMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		USkeletalMeshComponent* Character;
+		USkeletalMeshComponent* BaseMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		USkeletalMeshComponent* CharacterMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		ACharacter* Char;
 
-	UFUNCTION(BlueprintCallable, Category = "kategori")
-	void GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef);
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool InVehicle;
 
-	// Karakterlerin listesi
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		UArrowComponent* ExitLoc;
+
+	UFUNCTION(BlueprintCallable, Category = "Category")
+		void GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef);
+
+	//UFUNCTION(BlueprintCallable, Category = "Category")
+	//void OutOfVehicle();
+
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 protected:
+	UPROPERTY(VisibleAnywhere, Category = "Collision")
+		UBoxComponent* CollisionBox;
 
 private:
 	float Speed;
 	float SteerDirection;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<APawn> Chartype;
+
+	UFUNCTION(BlueprintCallable)
+		void Spawn();
 };
