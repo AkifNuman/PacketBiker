@@ -95,7 +95,7 @@ AScooter::AScooter()
 	Vehicle4W->SteeringCurve.GetRichCurve()->AddKey(60.0f, 0.8f);
 	Vehicle4W->SteeringCurve.GetRichCurve()->AddKey(120.0f, 0.7f);
 
-	Vehicle4W->GetMaxSpeed(12.f);
+	//Vehicle4W->GetMaxSpeed(12.f);
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	CollisionBox->SetCollisionObjectType(ECC_WorldDynamic);
