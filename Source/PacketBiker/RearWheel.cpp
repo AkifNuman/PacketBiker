@@ -1,13 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #include "RearWheel.h"
-
-PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 URearWheel::URearWheel()
 {
-	ShapeRadius = 17.5f;
-	ShapeWidth = 6.5f;
+	WheelRadius = 30.f;
+	WheelWidth = 18.f;
+	bAffectedBySteering = false;
+	bAffectedByEngine = true;
+	bAffectedByBrake = true;
 	bAffectedByHandbrake = true;
-	SteerAngle = 0.f;
-	Offset = FVector(-34.f, 0.f, -34.f);
+	AxleType = EAxleType::Rear;
+	SpringRate = 250.f;
+	SuspensionMaxRaise = 8.f;
+	SuspensionMaxDrop = 10.f;
 }

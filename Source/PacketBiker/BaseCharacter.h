@@ -1,11 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+/** Yürüyen oyuncu/yaya tabanı. */
 UCLASS()
 class PACKETBIKER_API ABaseCharacter : public ACharacter
 {
@@ -14,14 +13,7 @@ class PACKETBIKER_API ABaseCharacter : public ACharacter
 public:
 	ABaseCharacter();
 
-protected:
-	virtual void BeginPlay() override;
-
-public:	
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool InBox;
+	/** Bir motorun etkileşim kutusunun içinde mi (binmeye hazır). */
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Vehicle")
+	bool InBox = false;
 };
