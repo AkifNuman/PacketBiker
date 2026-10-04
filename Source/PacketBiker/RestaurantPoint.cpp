@@ -1,29 +1,34 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "RestaurantPoint.h"
+#include "MissionSubsystem.h"
+#include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
-// Sets default values
 ARestaurantPoint::ARestaurantPoint()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
+	Trigger = CreateDefaultSubobject<USphereComponent>(TEXT("Trigger"));
+	SetRootComponent(Trigger);
+	Trigger->InitSphereRadius(300.f);
+	Trigger->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Trigger->SetCollisionResponseToAllChannels(ECR_Ignore);
+	Trigger->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	Trigger->OnComponentBeginOverlap.AddDynamic(this, &ARestaurantPoint::OnTrigger);
 }
 
-// Called when the game starts or when spawned
 void ARestaurantPoint::BeginPlay()
 {
 	Super::BeginPlay();
-	m_restaurantloc = FMath::RandRange(0, 5);
-	m_targetloc = FMath::RandRange(0, 10);
-	
+	if (UMissionSubsystem* S = GetWorld()->GetSubsystem<UMissionSubsystem>()) S->RegisterRestaurant(this);
 }
 
-// Called every frame
-void ARestaurantPoint::Tick(float DeltaTime)
+void ARestaurantPoint::EndPlay(const EEndPlayReason::Type Reason)
 {
-	Super::Tick(DeltaTime);
-
+	if (UWorld* W = GetWorld()) if (UMissionSubsystem* S = W->GetSubsystem<UMissionSubsystem>()) S->Unregister(this);
+	Super::EndPlay(Reason);
 }
 
+void ARestaurantPoint::OnTrigger(UPrimitiveComponent*, AActor* Other, UPrimitiveComponent*, int32, bool, const FHitResult&)
+{
+	if (Other != UGameplayStatics::GetPlayerPawn(GetWorld(), 0)) return;
+	if (UMissionSubsystem* S = GetWorld()->GetSubsystem<UMissionSubsystem>()) S->NotifyArrived(this);
+}

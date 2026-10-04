@@ -1,22 +1,18 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/TimelineComponent.h"
 #include "BaseVehicle.h"
-#include "BaseCharacter.h"
-#include "Components/BoxComponent.h"
-#include "Components/ArrowComponent.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Scooter.generated.h"
 
+class ABaseCharacter;
+class UBoxComponent;
+class UArrowComponent;
+class USkeletalMeshComponent;
+
 /**
- *
+ * Oyuncunun sürdüğü motor. Chaos tabanlı.
+ * Faz 2: 4 tekerlek düzeni (2 ön, 2 arka, dar iz) korunur; gerçek 2 teker + yan yatma Faz 4.
  */
-
-class UCurveFloat;
-
 UCLASS()
 class PACKETBIKER_API AScooter : public ABaseVehicle
 {
@@ -25,67 +21,45 @@ class PACKETBIKER_API AScooter : public ABaseVehicle
 public:
 	AScooter();
 
-
-protected:
-	virtual void BeginPlay() override;
-
-public:
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	void Throttle(float Val);
 	void Steer(float Val);
 
-	void SteerLeftPress();
-	void SteerLeftRel();
-	void SteerRightPress();
-	void SteerRightRel();
+	/** Karakteri motora bindir: mesh ve anim'i motor üstündeki sürücü mesh'ine kopyalar. */
+	UFUNCTION(BlueprintCallable, Category = "Vehicle")
+	void GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, ACharacter* CharacterRef);
+
+	/** Motordan in: ExitLoc'un dünya konumuna karakter spawn edilir, kontrol ona geçer. */
+	UFUNCTION(BlueprintCallable, Category = "Vehicle")
 	void OutOfVehicle();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		USkeletalMeshComponent* MoveMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle")
+	TObjectPtr<USkeletalMeshComponent> CharacterMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		USkeletalMeshComponent* SteerMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Vehicle")
+	TObjectPtr<UArrowComponent> ExitLoc;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		USkeletalMeshComponent* BaseMesh;
+	UPROPERTY(BlueprintReadOnly, Category = "Vehicle")
+	bool bInVehicle = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		USkeletalMeshComponent* CharacterMesh;
+	/** Motordan inince spawn edilecek karakter sınıfı. */
+	UPROPERTY(EditDefaultsOnly, Category = "Vehicle")
+	TSubclassOf<APawn> CharacterClass;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		ACharacter* Char;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		bool InVehicle;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		UArrowComponent* ExitLoc;
-
-	UFUNCTION(BlueprintCallable, Category = "Category")
-		void GetInVehicle(USkeletalMesh* InputMesh, UClass* AnimInstance, bool PosproccessIsAnime, ACharacter* CharacterRef);
-
-	//UFUNCTION(BlueprintCallable, Category = "Category")
-	//void OutOfVehicle();
-
-	UFUNCTION()
-		void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
+	/** Bu hızın altındayken inilebilir (cm/s). */
+	UPROPERTY(EditDefaultsOnly, Category = "Vehicle")
+	float MaxExitSpeed = 150.f;
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Collision")
-		UBoxComponent* CollisionBox;
+	TObjectPtr<UBoxComponent> InteractBox;
 
-private:
-	float Speed;
-	float SteerDirection;
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<APawn> Chartype;
-
-	UFUNCTION(BlueprintCallable)
-		void Spawn();
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex);
 };
