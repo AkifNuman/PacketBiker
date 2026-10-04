@@ -1,28 +1,30 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "RestaurantPoint.generated.h"
 
+class USphereComponent;
+
+/** Paket alınan nokta. Oyuncu küreye girince MissionSubsystem'e bildirir. */
 UCLASS()
 class PACKETBIKER_API ARestaurantPoint : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	ARestaurantPoint();
-private:
-	int m_restaurantloc;
-	int m_targetloc;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mission")
+	FText DisplayName;
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(VisibleAnywhere, Category = "Mission")
+	TObjectPtr<USphereComponent> Trigger;
 
+	UFUNCTION()
+	void OnTrigger(UPrimitiveComponent* Comp, AActor* Other, UPrimitiveComponent* OtherComp, int32 Idx, bool bSweep, const FHitResult& Hit);
 };
