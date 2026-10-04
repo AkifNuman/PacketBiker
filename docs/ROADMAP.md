@@ -40,53 +40,53 @@ Tek istisna: Mobilde performans UE5 ile tutmazsa (Faz 7 sonunda ölçülecek) Un
 ### Faz 1 · Kurtarma ve envanter  `[ ]`
 Amaç: proje temiz bir makinede açılsın, derlensin, ne var ne yok bilinsin.
 - [ ] UE 4.27 ile projeyi aç, derle, `Map.umap`'i oyna. Çalışan/çalışmayan özellik listesi çıkar (video kaydı al).
-- [ ] Git LFS kur: `*.uasset *.umap *.png *.fbx *.wav` LFS'e. `.gitignore`'a `Binaries/ Intermediate/ Saved/ DerivedDataCache/ .vs/` (zaten var, kontrol et).
-- [ ] Kullanılmayan paketleri ve tüm `*/Maps/Demonstration*`, `*/Maps/Overview*` haritalarını sil. Hedef repo boyutu < 400 MB.
-- [ ] `Deneme.h/.cpp`, `HoloLens` config, `Res_Point` sil. Debug mesajlarını kaldır.
-- [ ] README: nasıl açılır, hangi harita gerçek, kontroller. `docs/` klasörü aç, bu dosyayı oraya koy.
+- [x] Git LFS kur: `*.uasset *.umap *.png *.fbx *.wav` LFS'e. `.gitignore`'a `Binaries/ Intermediate/ Saved/ DerivedDataCache/ .vs/` (zaten var, kontrol et).
+- [x] Kullanılmayan paketleri ve tüm `*/Maps/Demonstration*`, `*/Maps/Overview*` haritalarını sil. Hedef repo boyutu < 400 MB.
+- [x] `Deneme.h/.cpp`, `HoloLens` config, `Res_Point` sil. Debug mesajlarını kaldır.
+- [x] README: nasıl açılır, hangi harita gerçek, kontroller. `docs/` klasörü aç, bu dosyayı oraya koy.
 - [ ] Kabul: temiz klon + 4.27 ile 15 dakikada açılıp oynanabiliyor.
 
 ### Faz 2 · UE5 ve Chaos Vehicles'a geçiş  `[ ]`
 Amaç: modern motor, PhysX bağımlılığı sıfır.
 - [ ] UE 5.4 ile aç, migration log'unu kaydet.
-- [ ] `ABaseVehicle`/`AScooter` → `AWheeledVehiclePawn` + `UChaosWheeledVehicleMovementComponent`. `UFrontWheel`/`URearWheel` → `UChaosVehicleWheel`.
-- [ ] `PhysXVehicles` plugin ve `.uproject` bağımlılığını kaldır. `Build.cs`'e `ChaosVehicles`, `EnhancedInput` ekle.
-- [ ] Config temizliği: tek `DefaultEngine.ini`, mobil hedef ayarları bilinçli seçilsin (Lumen kapalı, mobile forward shading).
+- [x] `ABaseVehicle`/`AScooter` → `AWheeledVehiclePawn` + `UChaosWheeledVehicleMovementComponent`. `UFrontWheel`/`URearWheel` → `UChaosVehicleWheel`.
+- [x] `PhysXVehicles` plugin ve `.uproject` bağımlılığını kaldır. `Build.cs`'e `ChaosVehicles`, `EnhancedInput` ekle.
+- [x] Config temizliği: tek `DefaultEngine.ini`, mobil hedef ayarları bilinçli seçilsin (Lumen kapalı, mobile forward shading).
 - [ ] Tüm BP'ler hatasız derlensin (Blueprint compile-all).
 - [ ] Kabul: UE 5.4'te paketlenmiş Windows build'i oynanıyor.
 
 ### Faz 3 · Oyun döngüsü tasarımı (GDD)  `[ ]`
 Amaç: "oyun ne?" sorusunun tek sayfalık cevabı. Kod yazmadan önce.
-- [ ] `docs/GDD.md`: çekirdek döngü = telefon çalar → sipariş kabul → restorana git → paketi al → süre dolmadan teslim et → para + puan → gün biter → dükkan → yeni gün.
-- [ ] Bir "gün"ün süresi, sipariş sıklığı, ödeme formülü (mesafe × hız bonusu), yakıt tüketimi, başarısızlık koşulları.
-- [ ] Progresyon: hangi motor/karakter kaça, hangi yetenek ne yapar. 13 karakteri 6'ya indir (en iyi yeteneklere sahip olanlar).
-- [ ] MVP kapsamı: 1 şehir, 3 motor, 4 karakter, 10 restoran, sonsuz gün. Fazlası kesilir.
+- [x] `docs/GDD.md`: çekirdek döngü = telefon çalar → sipariş kabul → restorana git → paketi al → süre dolmadan teslim et → para + puan → gün biter → dükkan → yeni gün.
+- [x] Bir "gün"ün süresi, sipariş sıklığı, ödeme formülü (mesafe × hız bonusu), yakıt tüketimi, başarısızlık koşulları.
+- [x] Progresyon: hangi motor/karakter kaça, hangi yetenek ne yapar. 13 karakteri 6'ya indir (en iyi yeteneklere sahip olanlar).
+- [x] MVP kapsamı: 1 şehir, 3 motor, 4 karakter, 10 restoran, sonsuz gün. Fazlası kesilir.
 - [ ] Kabul: GDD'yi okuyan biri oyunu anlatabiliyor; ikiniz imzaladınız.
 
 ### Faz 4 · Araç hissi  `[ ]`
 Amaç: motora binmek tek başına eğlenceli olsun. Oyunun kalbi.
 - [ ] Gerçek iki tekerlek: Chaos'ta 2 wheel + yan yatma (lean) animasyonu hız/direksiyona bağlı. 4 tekerlek hack'i gitsin.
 - [ ] Scooter (yavaş, dayanıklı), Sport (hızlı, kaygan), Base (orta) olmak üzere 3 ayrı data asset ile ayar.
-- [ ] Bin/in: `OutOfVehicle` dünya transformu + yere raycast ile spawn, araç durmadan inilemez, tek `ACharacter` possess/unpossess, karakter mesh'i swap. Null kontrolleri.
+- [~] Bin/in: `OutOfVehicle` dünya transformu (kod yazıldı, test editörde) + yere raycast ile spawn, araç durmadan inilemez, tek `ACharacter` possess/unpossess, karakter mesh'i swap. Null kontrolleri.
 - [ ] Kamera: hızla açılan FOV, dönüşte takip, çarpışmada sarsıntı.
 - [ ] Çarpışma: belirli hızda düşme (crash anim zaten var), 2 sn sonra kalkma, paket hasarı.
 - [ ] Kabul: 10 kişilik playtest, "sürüş keyifli" ≥ 7/10.
 
 ### Faz 5 · Mission sistemi (C++)  `[ ]`
 Amaç: siparişler sonsuz ve veri güdümlü.
-- [ ] `UMissionSubsystem` (GameInstance subsystem): sipariş üret, aktif siparişi tut, süre say, tamamla/başarısız.
-- [ ] `ARestaurantPoint` ve `ADeliveryPoint` gerçek aktörler; haritaya yerleştirilir, subsystem'e kaydolur.
+- [x] `UMissionSubsystem` (GameInstance subsystem): sipariş üret, aktif siparişi tut, süre say, tamamla/başarısız.
+- [x] `ARestaurantPoint` ve `ADeliveryPoint` gerçek aktörler; haritaya yerleştirilir, subsystem'e kaydolur.
 - [ ] `DT_Restaurants`, `DT_OrderTypes` DataTable'ları: paket tipi (sıcak yemek: süre kısa, kırılgan: çarpışma ceza).
-- [ ] Telefon UI (`WB_Notif`) → sipariş kabul/ret, HUD'da hedef mesafe + kalan süre, minimap'te marker.
-- [ ] Ödeme formülü GDD'den.
+- [~] Telefon UI (`WB_Notif`) → subsystem delegelerine bağlanacak; → sipariş kabul/ret, HUD'da hedef mesafe + kalan süre, minimap'te marker.
+- [x] Ödeme formülü GDD'den.
 - [ ] Kabul: 30 dakika kesintisiz sipariş döngüsü, crash yok.
 
 ### Faz 6 · Ekonomi, ilerleme, kayıt  `[ ]`
-- [ ] `UPBSaveGame` (C++): para, gün, sahip olunan motorlar/karakterler, seçili set. `BP_SaveGame`'den taşı.
-- [ ] Gün sistemi: `BP_DayEndigCounter` → `UDaySubsystem`, gün sonu özet ekranı (kazanç, teslimat, kaza).
+- [x] `UPBSaveGame` (C++): para, gün, sahip olunan motorlar/karakterler, seçili set. `BP_SaveGame`'den taşı.
+- [~] Gün sistemi: `BP_DayEndigCounter` → `UDaySubsystem` (C++ hazır, BP geçişi editörde), gün sonu özet ekranı (kazanç, teslimat, kaza).
 - [ ] Dükkan: `WB_MenuBuyandPlaywith`'i gerçek satın alma ekranına çevir.
 - [ ] Yetenekler: dash (var), + 2 yeni (ör. zaman yavaşlatma, yakıt tasarrufu). `UGameplayAbility` değil, basit component yeterli.
-- [ ] Yakıt: `WB_FuelBar` + benzinlik aktörü, yakıt bitince itme mekaniği.
+- [~] Yakıt: `UFuelComponent` hazır; `WB_FuelBar` + benzinlik aktörü, yakıt bitince itme mekaniği.
 - [ ] Kabul: oyunu kapat-aç, her şey yerinde; 3 gün oynayıp motor alınabiliyor.
 
 ### Faz 7 · Şehir, trafik, performans  `[ ]`
@@ -127,3 +127,17 @@ Amaç: siparişler sonsuz ve veri güdümlü.
 | Tarih | Faz | Not |
 |---|---|---|
 | 2026-10-02 | — | Yol haritası oluşturuldu. |
+| 2026-10-05 | 1 | Repo temizliği: PolygonShops + demo haritalar silindi (~400 MB), ölü kod, LFS attributes, README. Branch `product/faz1-kurtarma`. |
+| 2026-10-05 | 3 | GDD yazıldı. İmza bekliyor (Akif + khonvoum). |
+| 2026-10-05 | 2 | Chaos portu yazıldı, **derlenmedi** (Mac'te UE yok). İlk UE 5.4 açılışı akif'te yapılacak. |
+| 2026-10-05 | 5,6 | Mission/Day/Save/Fuel C++ iskeleti yazıldı, derlenmedi. BP bağlantıları editörde. |
+
+## Editör gerektiren sıradaki işler (akif / Windows + UE 5.4)
+
+1. `product/faz1-kurtarma` branch'ini çek, UE 5.4 ile aç, "Rebuild modules". Derleme hatalarını düzelt (Chaos API adları).
+2. `BP_BaseMotorcycle`/`BP_BaseVehicle`'ın parent'ını yeni `AScooter`'a bağla, teker kemik adlarını (`F_Wheel`, `R_Wheel`) doğrula.
+3. Blueprint compile-all; `BP_SaveGame`, `BP_DayEndigCounter`, `BP_Counter`, `BP_RestaurantPoint`, `BP_TargetPoint` mantığını yeni subsystem'lere taşı.
+4. `DT_OrderTypes` DataTable'ını `FOrderTypeRow` ile oluştur (HotFood: 8 m/s +10 s; Fragile: 6 m/s +15 s, kaza ×0.5).
+5. `Map.umap` içinde 10 `ARestaurantPoint`, 40 `ADeliveryPoint` yerleştir. Oyna, Faz 1 videosunu kaydet.
+6. Git LFS: GitHub ücretsiz kota 1 GB. Mevcut 850 MB içeriği LFS'e taşımak kotayı bitirir. Seçenekler: GitHub Data Pack (5$/ay) **veya** b2 sunucusunda self-hosted LFS (`lfs-test-server`/`giftless`). Karar verilince `git lfs migrate import --everything` çalıştırılır.
+
